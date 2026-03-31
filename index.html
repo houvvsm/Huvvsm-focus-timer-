@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="HUVVSM Focus Timer — Pomodoro countdown, stopwatch, and session tracking with a neon glass UI." />
+  <title>HUVVSM Timer</title>
+
+  <!-- FIX #7 — inline SVG favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%2305060a'/><path d='M8 8 L8 24 L12 24 L12 16 L16 24 L20 16 L20 24 L24 24 L24 8' fill='none' stroke='%235af3ff' stroke-width='2.2' stroke-linejoin='round'/></svg>" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <main class="app">
+
+    <!-- BRAND -->
+    <header class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 120 120">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#5af3ff" />
+              <stop offset="1" stop-color="#8b5cff" />
+            </linearGradient>
+          </defs>
+          <g fill="none" stroke="url(#g)" stroke-width="8" transform="translate(12,12) scale(0.8)">
+            <path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10" />
+          </g>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1 class="brand-title">HUVVSM</h1>
+        <p class="muted">Focus Timer</p>
+      </div>
+    </header>
+
+    <!-- MODE SWITCH -->
+    <section class="modes" aria-label="Timer modes">
+      <button class="mode-btn active" data-mode="focus"     type="button">Focus</button>
+      <button class="mode-btn"        data-mode="break"     type="button">Break</button>
+      <button class="mode-btn"        data-mode="long"      type="button">Long</button>
+      <button class="mode-btn"        data-mode="stopwatch" type="button">Stopwatch</button>
+    </section>
+
+    <!-- TIMER CARD -->
+    <section class="card">
+
+      <!-- SETTINGS (hidden in stopwatch by JS) -->
+      <div id="focusSettings" class="settings">
+
+        <!-- FIX #20 — quick preset buttons -->
+        <div class="presets">
+          <span class="presets-label muted">Quick set:</span>
+          <button class="preset-btn" data-mins="15" type="button">15m</button>
+          <button class="preset-btn" data-mins="25" type="button">25m</button>
+          <button class="preset-btn" data-mins="45" type="button">45m</button>
+          <button class="preset-btn" data-mins="60" type="button">60m</button>
+        </div>
+
+        <div class="set-row">
+          <label class="set">
+            Custom (min)
+            <!-- FIX #8 — font-size on input in CSS -->
+            <input id="focusMinutes" type="number" min="1" max="180" value="25" />
+          </label>
+          <button id="saveFocusBtn" class="btn ghost small" type="button">Save</button>
+          <!-- FIX #2 — notifyBtn feedback now uses toast, not alert() -->
+          <button id="notifyBtn"    class="btn ghost small" type="button">Enable Alerts</button>
+        </div>
+
+      </div>
+
+      <!-- FIX #17 — SVG progress ring wrapping the timer -->
+      <div class="ring-wrap" aria-hidden="true">
+        <svg class="ring-svg" viewBox="0 0 200 200">
+          <defs>
+            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="#5af3ff" />
+              <stop offset="100%" stop-color="#8b5cff" />
+            </linearGradient>
+          </defs>
+          <!-- Track -->
+          <circle class="ring-track"    cx="100" cy="100" r="88" />
+          <!-- Progress arc — stroke-dashoffset driven by JS -->
+          <circle class="ring-progress" cx="100" cy="100" r="88" id="ringProgress" />
+        </svg>
+
+        <!-- Timer display sits centred inside the ring -->
+        <!-- FIX #10 — aria-live for screen readers -->
+        <div class="timer">
+          <span id="time" aria-live="polite" aria-atomic="true">25:00</span>
+        </div>
+      </div>
+
+      <!-- FIX #21 — Pomodoro session dots (every 4 focus = long break) -->
+      <div class="pomo-dots" id="pomoDots" aria-label="Pomodoro progress (4 sessions = long break)">
+        <span class="pomo-dot" data-idx="0"></span>
+        <span class="pomo-dot" data-idx="1"></span>
+        <span class="pomo-dot" data-idx="2"></span>
+        <span class="pomo-dot" data-idx="3"></span>
+      </div>
+
+      <!-- META CHIPS -->
+      <div class="meta">
+        <!-- FIX #13 — chips get min-width in CSS -->
+        <div class="chip">Sessions: <strong id="sessions">0</strong></div>
+        <div class="chip">Mode: <strong id="modeLabel">Focus</strong></div>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="controls">
+        <button id="startBtn" class="btn primary"   type="button">Start</button>
+        <button id="pauseBtn" class="btn ghost"     type="button" disabled>Pause</button>
+        <button id="resetBtn" class="btn ghost"     type="button">Reset</button>
+        <!-- FIX #6 — hidden by default in CSS (.mark-btn), no JS flash -->
+        <button id="markBtn"  class="btn ghost mark-btn" type="button" disabled>Mark</button>
+      </div>
+
+      <!-- FIX #2/#3 — toast replaces all alert() calls -->
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+      <!-- LAPS — FIX #15: max-height + scroll in CSS -->
+      <ul id="laps" class="laps" aria-label="Stopwatch marks"></ul>
+
+    </section>
+
+    <!-- FIX #18 — keyboard shortcut hint bar -->
+    <div class="shortcuts muted">
+      <kbd>Space</kbd> Start / Pause
+      <span class="sep">·</span>
+      <kbd>R</kbd> Reset
+      <span class="sep">·</span>
+      <kbd>M</kbd> Mark
+    </div>
+
+    <footer class="foot muted">HUVVSM • Neon Focus System</footer>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
