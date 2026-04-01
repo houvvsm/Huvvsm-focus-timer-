@@ -1,6 +1,5 @@
 /* ===============================
-   HUVVSM TIMER — style.css (v5)
-   All audit fixes applied.
+   HUVVSM FOCUS TIMER — style.css 
 ================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rubik:wght@300;400;500;700&display=swap');
@@ -26,7 +25,7 @@
 
   /* Ring */
   --ring-r:      88;
-  --ring-circum: 553.0; /* 2π×88, updated by JS via stroke-dashoffset */
+  --ring-circum: 553.0; 
 }
 
 body{
@@ -37,7 +36,6 @@ body{
     radial-gradient(700px 350px at 50% 100%, rgba(90,243,255,0.07), transparent 60%),
     linear-gradient(180deg, var(--bg1), var(--bg0));
   color: var(--txt);
-  /* FIX #9 — explicit font-family on body so all elements inherit correctly */
   font-family: 'Rubik', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
   display: flex;
   justify-content: center;
@@ -142,7 +140,6 @@ body{
   color: var(--muted);
   padding: 12px 10px;
   border-radius: 12px;
-  /* FIX #9/#14 — explicit font family + size on all buttons */
   font-family: 'Rubik', system-ui, Arial, sans-serif;
   font-size: 13px;
   font-weight: 600;
@@ -199,7 +196,7 @@ body{
 }
 
 /* ===============================
-   FIX #17 — Progress ring
+   Progress ring
 ================================ */
 .ring-wrap{
   position: relative;
@@ -260,7 +257,7 @@ body{
 }
 
 /* ===============================
-   FIX #21 — Pomodoro dots
+   Pomodoro dots
 ================================ */
 .pomo-dots{
   display: flex;
@@ -301,7 +298,6 @@ body{
   margin-bottom: 18px;
 }
 
-/* FIX #13 — min-width so chips don't collapse */
 .chip{
   padding: 10px 16px;
   border-radius: 999px;
@@ -331,7 +327,6 @@ body{
   flex-wrap: wrap;
 }
 
-/* FIX #9/#14 — explicit font on base .btn */
 .btn{
   border: none;
   cursor: pointer;
@@ -370,7 +365,6 @@ body{
   transform: none;
 }
 
-/* FIX #6 — Mark button hidden by default in CSS; JS adds/removes .mark-btn--hidden */
 .mark-btn{
   /* visible by default only in stopwatch — JS hides it otherwise */
   display: none;           /* hidden until JS shows it */
@@ -384,7 +378,7 @@ body{
 }
 
 /* ===============================
-   FIX #2/#3 — Toast notification
+ Toast notification
 ================================ */
 .toast{
   margin: 12px auto 0;
@@ -436,7 +430,6 @@ body{
   z-index: 1;
 }
 
-/* FIX #20 — preset buttons row */
 .presets{
   display: flex;
   gap: 8px;
@@ -485,7 +478,6 @@ body{
   color: var(--muted);
 }
 
-/* FIX #8/#16 — explicit font-size on input prevents iOS Safari zoom */
 .set input{
   width: 110px;
   padding: 10px 12px;
@@ -494,7 +486,7 @@ body{
   background: rgba(0,0,0,0.18);
   color: var(--txt);
   font-family: 'Rubik', system-ui, Arial, sans-serif;
-  font-size: 16px;   /* ≥16px prevents iOS auto-zoom */
+  font-size: 16px;   
   outline: none;
   -webkit-appearance: none;
   appearance: none;
@@ -512,7 +504,7 @@ body{
 }
 
 /* ===============================
-   LAPS — FIX #15 max-height + scroll
+   LAPS  max-height + scroll
 ================================ */
 .laps{
   list-style: none;
@@ -523,7 +515,6 @@ body{
   padding: 0;
   position: relative;
   z-index: 1;
-  /* FIX #15 */
   max-height: 260px;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -552,7 +543,7 @@ body{
 .laps li strong{ color: var(--txt); }
 
 /* ===============================
-   FIX #18 — Keyboard shortcut bar
+ Keyboard shortcut bar
 ================================ */
 .shortcuts{
   display: flex;
@@ -623,7 +614,6 @@ kbd{
 
   .chip{ min-width: 100px; font-size: 12px; }
 
-  /* FIX #16 — settings row stacks on small screens */
   .set-row{
     flex-direction: column;
     align-items: flex-start;
