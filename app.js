@@ -1,11 +1,10 @@
 /* ===============================
-   HUVVSM TIMER — app.js (v5)
-   All 21 audit fixes applied.
+   HUVVSM FOCUS TIMER — app.js 
 ================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // FIX #1 — all DOM queries inside DOMContentLoaded
+  //  all DOM queries inside DOMContentLoaded
   const timeEl        = document.getElementById("time");
   const sessionsEl    = document.getElementById("sessions");
   const modeLabelEl   = document.getElementById("modeLabel");
@@ -23,19 +22,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveFocusBtn     = document.getElementById("saveFocusBtn");
   const notifyBtn        = document.getElementById("notifyBtn");
 
-  // FIX #17 — progress ring element
+  //  progress ring element
   const ringProgress  = document.getElementById("ringProgress");
   const RING_R        = 88;
   const RING_CIRCUM   = 2 * Math.PI * RING_R;
 
-  // FIX #21 — pomodoro dots
+  //  pomodoro dots
   const pomoDots      = document.getElementById("pomoDots");
   const POMO_CYCLE    = 4;
 
-  // FIX #2/#3 — toast element
+  // toast element
   const toastEl       = document.getElementById("toast");
 
-  // FIX #20 — preset buttons
+  //  preset buttons
   const presetBtns    = Array.from(document.querySelectorAll(".preset-btn"));
 
   /* Default durations (seconds) */
@@ -131,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ===============================
-     FIX #2/#3 — Toast (replaces alert())
+    Toast (replaces alert())
   ================================ */
 
   let toastTimer = null;
@@ -147,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ===============================
-     FIX #17 — Progress ring
+     Progress ring
   ================================ */
 
   function updateRing() {
@@ -173,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ===============================
-     FIX #21 — Pomodoro dots
+     Pomodoro dots
   ================================ */
 
   function updatePomoDots() {
@@ -186,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ===============================
-     FIX #19 — document.title update
+      document.title update
   ================================ */
 
   function updateDocTitle() {
@@ -203,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderLaps() {
     if (!lapsEl) return;
-    // FIX #12 — keep Mark button in layout always; toggle visibility only
+    //  keep Mark button in layout always; toggle visibility only
     lapsEl.style.display = isStopwatch() ? "flex" : "none";
     lapsEl.innerHTML = "";
     if (!isStopwatch()) return;
@@ -228,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
     startBtn.disabled = state.running;
     pauseBtn.disabled = !state.running;
 
-    // FIX #6/#12 — Mark button: always in layout, visibility toggled
+    //  Mark button: always in layout, visibility toggled
     if (markBtn) {
       markBtn.classList.toggle("mark-btn--hidden", !isStopwatch());
       markBtn.disabled = !state.running || !isStopwatch();
@@ -251,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ===============================
-     FIX #11 — Notifications + faded beep
+      Notifications + faded beep
   ================================ */
 
   async function ensureNotificationPermission() {
@@ -272,7 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
       o.type            = "sine";
       o.frequency.value = 660;     // slightly mellower pitch
       g.gain.setValueAtTime(0.08, ctx.currentTime);
-      // FIX #11 — smooth fade-out instead of hard cut
+      //  smooth fade-out instead of hard cut
       g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.55);
 
       o.connect(g);
@@ -388,7 +387,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (state.running) state.lastTickAt = Date.now();
 
-    // FIX #5 — brief visual flash on reset
+    //  brief visual flash on reset
     showToast(`${modeName(state.mode)} reset`, "info", 1400);
 
     saveState();
@@ -455,7 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function applyFocusDuration(mins) {
     if (!Number.isFinite(mins) || mins < 1 || mins > 180) {
-      // FIX #3 — inline toast instead of alert()
+      //  inline toast instead of alert()
       showToast("Choose between 1 – 180 minutes.", "error");
       if (focusMinutesInput) focusMinutesInput.value = Math.round(state.focusDuration / 60);
       return;
@@ -538,14 +537,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (saveFocusBtn) saveFocusBtn.addEventListener("click", saveFocusDurationFromInput);
 
-  // FIX #20 — preset buttons
+  //  preset buttons
   presetBtns.forEach(btn => {
     btn.addEventListener("click", () => {
       applyFocusDuration(Number(btn.dataset.mins));
     });
   });
 
-  // FIX #2 — notifyBtn uses toast not alert()
+  //  notifyBtn uses toast not alert()
   if (notifyBtn) {
     notifyBtn.addEventListener("click", async () => {
       const ok = await ensureNotificationPermission();
@@ -557,7 +556,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // FIX #18 — keyboard shortcuts
+  //  keyboard shortcuts
   document.addEventListener("keydown", e => {
     // Ignore when typing in an input
     if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
